@@ -18,6 +18,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2F42F860-206
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{454371CF-3069-427C-A613-D32C7E477A5F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RgTrello.Services", "RgTrello.Services\RgTrello.Services.csproj", "{92D8D675-93A0-4D57-930D-D5EB8EF00156}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RgTrello.Services.Tests", "RgTrello.Services.Tests\RgTrello.Services.Tests.csproj", "{66B2EFEC-06BB-4AA9-9046-7DF780158AA6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +36,14 @@ Global
 		{FA006DF8-CA60-4059-931C-2CCEDF59CFFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA006DF8-CA60-4059-931C-2CCEDF59CFFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA006DF8-CA60-4059-931C-2CCEDF59CFFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92D8D675-93A0-4D57-930D-D5EB8EF00156}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92D8D675-93A0-4D57-930D-D5EB8EF00156}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92D8D675-93A0-4D57-930D-D5EB8EF00156}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92D8D675-93A0-4D57-930D-D5EB8EF00156}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66B2EFEC-06BB-4AA9-9046-7DF780158AA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66B2EFEC-06BB-4AA9-9046-7DF780158AA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66B2EFEC-06BB-4AA9-9046-7DF780158AA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66B2EFEC-06BB-4AA9-9046-7DF780158AA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -39,5 +51,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{96F8ACDE-F9AD-462B-854B-C89990C342A4} = {2F42F860-206A-424A-89B2-24B8FD95DF36}
 		{FA006DF8-CA60-4059-931C-2CCEDF59CFFC} = {454371CF-3069-427C-A613-D32C7E477A5F}
+		{92D8D675-93A0-4D57-930D-D5EB8EF00156} = {2F42F860-206A-424A-89B2-24B8FD95DF36}
+		{66B2EFEC-06BB-4AA9-9046-7DF780158AA6} = {454371CF-3069-427C-A613-D32C7E477A5F}
 	EndGlobalSection
 EndGlobal

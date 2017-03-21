@@ -10,6 +10,7 @@ namespace RgTrello.App_Start
 
     using Ninject;
     using Ninject.Web.Common;
+    using RgTrello.Services;
 
     public static class NinjectWebCommon 
     {
@@ -39,7 +40,7 @@ namespace RgTrello.App_Start
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-            var kernel = new StandardKernel();
+            var kernel = new StandardKernel(new ServicesNinjectModule());
             try
             {
                 kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
