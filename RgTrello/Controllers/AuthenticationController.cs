@@ -1,5 +1,6 @@
-﻿using RgTrello.Services.Interfaces;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
+using Microsoft.Web.WebPages.OAuth;
+using RgTrello.Services.Interfaces;
 
 namespace RgTrello.Controllers
 {
@@ -14,8 +15,14 @@ namespace RgTrello.Controllers
 
         public ActionResult Index()
         {
-            _trelloService.Authorize();
+            OAuthWebSecurity.RequestAuthentication("Trello", this.Url.Action("OAuthCallBack", new { ReturnUrl = "/" }));
             return View();
+        }
+
+        public ActionResult OAuthCallBack(string returnUrl)
+        {
+            var result = OAuthWebSecurity.VerifyAuthentication(this.Url.Action("OAuthCallBack", new { ReturnUrl = returnUrl }));
+            return null;
         }
     }
 }
