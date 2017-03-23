@@ -43,6 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\TokenNotFoundException.cs" />
+    <Compile Include="Interfaces\ITokenManager.cs" />
+    <Compile Include="TokenManager.cs" />
     <Compile Include="TrelloService.cs" />
     <Compile Include="Interfaces\ITrelloService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -51,5 +54,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

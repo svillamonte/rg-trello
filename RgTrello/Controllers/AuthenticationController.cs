@@ -6,23 +6,29 @@ namespace RgTrello.Controllers
 {
     public class AuthenticationController : Controller
     {
-        private readonly ITrelloService _trelloService;
+        private readonly ITokenManager _tokenManager;
 
-        public AuthenticationController(ITrelloService trelloService)
+        public AuthenticationController(ITokenManager tokenManager)
         {
-            _trelloService = trelloService;
+            _tokenManager = tokenManager;
         }
 
         public ActionResult Index()
         {
-            OAuthWebSecurity.RequestAuthentication("Trello", this.Url.Action("OAuthCallBack", new { ReturnUrl = "/" }));
+            OAuthWebSecurity.RequestAuthentication("Trello", Url.Action("OAuthCallBack", new { ReturnUrl = "/" }));
             return View();
         }
 
         public ActionResult OAuthCallBack(string returnUrl)
         {
-            var result = OAuthWebSecurity.VerifyAuthentication(this.Url.Action("OAuthCallBack", new { ReturnUrl = returnUrl }));
-            return null;
+            var result = OAuthWebSecurity.VerifyAuthentication(Url.Action("OAuthCallBack", new { ReturnUrl = returnUrl }));
+
+            if (result.IsSuccessful)
+            {
+                _tokenManager.AddUserToken(result.ExtraData["accesstoken"]);
+            }            
+
+            return RedirectToAction("Index", "Boards");
         }
     }
 }

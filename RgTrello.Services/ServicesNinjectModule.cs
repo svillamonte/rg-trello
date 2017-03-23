@@ -7,6 +7,8 @@ namespace RgTrello.Services
     {
         public override void Load()
         {
+            Bind<ITokenManager>().To<TokenManager>().InSingletonScope();
+
             Bind<ITrelloService>().To<TrelloService>();
         }
     }
