@@ -1,5 +1,6 @@
 ﻿using Ninject.Modules;
 using RgTrello.Services.Interfaces;
+using RgTrello.Services.Trello;
 
 namespace RgTrello.Services
 {
@@ -9,6 +10,7 @@ namespace RgTrello.Services
         {
             Bind<ITokenManager>().To<TokenManager>().InSingletonScope();
 
+            Bind<ITrelloApiClient>().To<TrelloApiClient>();
             Bind<ITrelloService>().To<TrelloService>();
         }
     }

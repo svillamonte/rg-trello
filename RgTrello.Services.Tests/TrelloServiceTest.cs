@@ -23,6 +23,19 @@ namespace RgTrello.Services.Tests
         }
 
         [TestMethod]
+        public void SetToken()
+        {
+            // Arrange
+            var token = "anicetokentotest";
+
+            // Act
+            _trelloService.SetToken(token);
+
+            // Assert
+            _mockTrelloApiClient.Verify(x => x.SetToken(token), Times.Once);
+        }
+
+        [TestMethod]
         public void GetBoards_WithNormalBehaviour_ReturnsListOfTrelloBoards()
         {
             // Arrange

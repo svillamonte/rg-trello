@@ -6,8 +6,11 @@ namespace RgTrello.Services.Trello
     {
         private const string ApplicationKey = "e5d791adee00e3f581912a309588559d";
 
-        public TrelloApiClient(string userToken)
-            : base("https://api.trello.com/1/")
+        public TrelloApiClient() : base("https://api.trello.com/1/")
+        {            
+        }
+
+        public void SetToken(string userToken)
         {
             Authenticator = new TrelloAuthenticator(ApplicationKey, userToken);
         }

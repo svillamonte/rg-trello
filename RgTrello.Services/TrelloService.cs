@@ -15,6 +15,11 @@ namespace RgTrello.Services
             _trelloClient = trelloClient;
         }
 
+        public void SetToken(string userToken)
+        {
+            _trelloClient.SetToken(userToken);
+        }
+
         public IEnumerable<TrelloBoard> GetBoards()
         {
             try
