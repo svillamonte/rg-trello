@@ -16,7 +16,7 @@ namespace RgTrello.Controllers
             _tokenManager = tokenManager;
             _trelloService = trelloService;
         }
-        
+
         public ActionResult Index()
         {
             try
@@ -28,6 +28,24 @@ namespace RgTrello.Controllers
                     .Select(x => new BoardModel { Id = x.Id, Name = x.Name });
 
                 return View(boardModels);
+            }
+            catch (TokenNotFoundException)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+        public ActionResult Board(string id)
+        {
+            try
+            {
+                var accessToken = _tokenManager.GetUserToken();
+                _trelloService.SetToken(accessToken);
+
+                var cardModels = _trelloService.GetBoardCards(id)
+                    .Select(x => new CardModel { Id = x.Id, Name = x.Name });
+
+                return View(cardModels);
             }
             catch (TokenNotFoundException)
             {

@@ -9,6 +9,6 @@
 <ul>
 @foreach (var boardModel in Model)
 {
-    <li><a href="@Url.Action("Get", "Boards", new { id = boardModel.Id })">@boardModel.Name</a></li>
+    <li><a href="@Url.Action("Board", "Boards", new { id = boardModel.Id })">@boardModel.Name</a></li>
 }
 </ul>

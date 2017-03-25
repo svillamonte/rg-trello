@@ -48,7 +48,9 @@ namespace RgTrello.Tests.Controllers
             var boardTwo = new TrelloBoard { Id = "aaa222", Name = "Board two" };
             var boardThree = new TrelloBoard { Id = "aaa333", Name = "Board three" };
 
-            _mockTrelloService.Setup(x => x.GetBoards()).Returns(new[] { boardOne, boardTwo, boardThree });
+            _mockTrelloService
+                .Setup(x => x.GetBoards())
+                .Returns(new[] { boardOne, boardTwo, boardThree });
 
             // Act
             var result = _boardsController.Index() as ViewResult;
@@ -75,6 +77,67 @@ namespace RgTrello.Tests.Controllers
 
             // Act
             var result = _boardsController.Index() as RedirectToRouteResult;
+
+            // Assert
+            Assert.AreEqual("Index", result.RouteValues["action"]);
+            Assert.AreEqual("Home", result.RouteValues["controller"]);
+        }
+
+        [TestMethod]
+        public void Board_WithNoExceptions_MethodCallsTokenManagerAndTrelloService()
+        {
+            // Act
+            var boardId = "aniceboardid";
+
+            var result = _boardsController.Board(boardId) as ViewResult;
+
+            // Assert
+            _mockTokenManager.Verify(x => x.GetUserToken(), Times.Once);
+            _mockTrelloService.Verify(x => x.SetToken(_mockTokenManager.Object.GetUserToken()), Times.Once);
+            _mockTrelloService.Verify(x => x.GetBoardCards(boardId), Times.Once);
+        }
+
+        [TestMethod]
+        public void Board_WithApiReturningThreeCards_ViewResultIsBuiltWithRelatedCardModels()
+        {
+            // Arrange
+            var boardId = "aniceboardid";
+
+            var cardOne = new TrelloCard { Id = "aaa111", Name = "Card one", Description = "Description one" };
+            var cardTwo = new TrelloCard { Id = "aaa222", Name = "Card two", Description = "Description one" };
+            var cardThree = new TrelloCard { Id = "aaa333", Name = "Card three", Description = "Description one" };
+
+            _mockTrelloService
+                .Setup(x => x.GetBoardCards(boardId))
+                .Returns(new[] { cardOne, cardTwo, cardThree });
+
+            // Act
+            var result = _boardsController.Board(boardId) as ViewResult;
+
+            // Assert
+            Assert.IsInstanceOfType(result.Model, typeof(IEnumerable<CardModel>));
+            var enumerable = (IEnumerable<CardModel>)result.Model;
+
+            Assert.AreEqual(cardOne.Id, enumerable.ElementAt(0).Id);
+            Assert.AreEqual(cardOne.Name, enumerable.ElementAt(0).Name);
+
+            Assert.AreEqual(cardTwo.Id, enumerable.ElementAt(1).Id);
+            Assert.AreEqual(cardTwo.Name, enumerable.ElementAt(1).Name);
+
+            Assert.AreEqual(cardThree.Id, enumerable.ElementAt(2).Id);
+            Assert.AreEqual(cardThree.Name, enumerable.ElementAt(2).Name);
+        }
+
+        [TestMethod]
+        public void Board_WithApiThrowingException_RedirectsToHomeController()
+        {
+            // Arrange
+            var boardId = "aniceboardid";
+
+            _mockTrelloService.Setup(x => x.GetBoardCards(boardId)).Throws(new TokenNotFoundException());
+
+            // Act
+            var result = _boardsController.Board(boardId) as RedirectToRouteResult;
 
             // Assert
             Assert.AreEqual("Index", result.RouteValues["action"]);

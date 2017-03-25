@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "Board's cards";
+}
+
+@model IEnumerable<RgTrello.Models.Boards.CardModel>
+
+<h1>Board's cards</h1>
+
+@if (Model.Any())
+{
+    <ul>
+        @foreach (var cardModel in Model)
+        {
+            <li><a href="@Url.Action("Card", "Cards", new { id = cardModel.Id })">@cardModel.Name</a></li>
+        }
+    </ul>
+}
+else
+{
+    <i>Nothing around...</i>
+}
