@@ -1,7 +1,12 @@
-﻿namespace RgTrello.Services.Interfaces
+﻿using System.Collections.Generic;
+using RgTrello.Services.Trello.DTOs;
+
+namespace RgTrello.Services.Interfaces
 {
     public interface ITrelloService
     {
-        void Authorize();
+        IEnumerable<TrelloBoard> GetBoards();
+
+        IEnumerable<TrelloCard> GetBoardCards(string boardId);
     }
 }

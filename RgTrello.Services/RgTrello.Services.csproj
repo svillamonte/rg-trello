@@ -33,6 +33,9 @@
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
     </Reference>
+    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.105.2.3\lib\net452\RestSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Trello\DTOs\TrelloBoard.cs" />
+    <Compile Include="Trello\DTOs\TrelloCard.cs" />
     <Compile Include="Exceptions\TokenNotFoundException.cs" />
     <Compile Include="Interfaces\ITokenManager.cs" />
     <Compile Include="TokenManager.cs" />
@@ -50,6 +55,9 @@
     <Compile Include="Interfaces\ITrelloService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServicesNinjectModule.cs" />
+    <Compile Include="Trello\ITrelloApiClient.cs" />
+    <Compile Include="Trello\TrelloApiClient.cs" />
+    <Compile Include="Trello\TrelloAuthenticator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
