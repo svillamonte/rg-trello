@@ -10,5 +10,7 @@ namespace RgTrello.Services.Interfaces
         IEnumerable<TrelloBoard> GetBoards();
 
         IEnumerable<TrelloCard> GetBoardCards(string boardId);
+
+        ITrelloCard GetCard(string cardId);
     }
 }

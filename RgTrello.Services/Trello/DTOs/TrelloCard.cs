@@ -2,7 +2,7 @@
 
 namespace RgTrello.Services.Trello.DTOs
 {
-    public class TrelloCard
+    public class TrelloCard : ITrelloCard
     {
         public string Id { get; set; }
 

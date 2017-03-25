@@ -120,6 +120,26 @@ namespace RgTrello.Services.Tests
         }
 
         [TestMethod]
+        public void GetBoardCards_WithInvalidId_ReturnsEmptyList()
+        {
+            // Arrange
+            var mockRestResponse = new Mock<IRestResponse<List<TrelloCard>>>();
+            mockRestResponse
+                .Setup(x => x.Data)
+                .Returns((List<TrelloCard>)null);
+
+            _mockTrelloApiClient
+                .Setup(x => x.Execute<List<TrelloCard>>(It.IsAny<RestRequest>()))
+                .Returns(mockRestResponse.Object);
+
+            // Act
+            var results = _trelloService.GetBoardCards(It.IsAny<string>());
+
+            // Assert
+            Assert.IsFalse(results.Any());
+        }
+
+        [TestMethod]
         public void GetBoardCards_WithIssuesInCommunicationWithApi_ReturnsEmptyList()
         {
             // Arrange
@@ -132,6 +152,72 @@ namespace RgTrello.Services.Tests
 
             // Assert
             Assert.IsFalse(results.Any());
+        }
+
+        [TestMethod]
+        public void GetCard_WithNormalBehaviour_ReturnsExpectedTrelloCard()
+        {
+            // Arrange
+            var cardOne = new TrelloCard { Id = "aaa111", Name = "Card one", Description = "Description one" };
+
+            var mockRestResponse = new Mock<IRestResponse<TrelloCard>>();
+            mockRestResponse
+                .Setup(x => x.Data)
+                .Returns(cardOne);
+
+            _mockTrelloApiClient
+                .Setup(x => x.Execute<TrelloCard>(It.IsAny<RestRequest>()))
+                .Returns(mockRestResponse.Object);
+
+            // Act
+            var result = _trelloService.GetCard(It.IsAny<string>());
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(TrelloCard));
+            Assert.AreEqual("aaa111", result.Id);
+            Assert.AreEqual("Card one", result.Name);
+            Assert.AreEqual("Description one", result.Description);
+        }
+
+        [TestMethod]
+        public void GetCard_WithInvalidId_ReturnsNullObject()
+        {
+            // Arrange
+            var mockRestResponse = new Mock<IRestResponse<TrelloCard>>();
+            mockRestResponse
+                .Setup(x => x.Data)
+                .Returns((TrelloCard)null);
+
+            _mockTrelloApiClient
+                .Setup(x => x.Execute<TrelloCard>(It.IsAny<RestRequest>()))
+                .Returns(mockRestResponse.Object);
+
+            // Act
+            var result = _trelloService.GetCard(It.IsAny<string>());
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(NullTrelloCard));
+            Assert.IsNull(result.Id);
+            Assert.IsNull(result.Name);
+            Assert.IsNull(result.Description);
+        }
+
+        [TestMethod]
+        public void GetCard_WithIssuesInCommunicationWithApi_ReturnsNullObject()
+        {
+            // Arrange
+            _mockTrelloApiClient
+                .Setup(x => x.Execute<TrelloCard>(It.IsAny<RestRequest>()))
+                .Throws(new System.Exception());
+
+            // Act
+            var result = _trelloService.GetCard(It.IsAny<string>());
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(NullTrelloCard));
+            Assert.IsNull(result.Id);
+            Assert.IsNull(result.Name);
+            Assert.IsNull(result.Description);
         }
     }
 }

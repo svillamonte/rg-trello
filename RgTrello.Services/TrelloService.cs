@@ -43,12 +43,38 @@ namespace RgTrello.Services
                 request.AddUrlSegment("id", boardId);
 
                 var response = _trelloClient.Execute<List<TrelloCard>>(request);
+                if (response.Data == null)
+                {
+                    return new TrelloCard[0];
+                }
+
                 return response.Data;
             }
             catch
             {
                 return new TrelloCard[0];
             }            
+        }
+
+        public ITrelloCard GetCard(string cardId)
+        {
+            try
+            {
+                var request = new RestRequest("cards/{id}", Method.GET);
+                request.AddUrlSegment("id", cardId);
+
+                var response = _trelloClient.Execute<TrelloCard>(request);
+                if (response.Data == null)
+                {
+                    return new NullTrelloCard();
+                }
+
+                return response.Data;
+            }
+            catch
+            {
+                return new NullTrelloCard();
+            }
         }
     }
 }
