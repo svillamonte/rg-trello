@@ -1,5 +1,14 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Boards";
 }
 
-<h1>Signed in!</h1>
+@model IEnumerable<RgTrello.Models.Boards.BoardModel>
+
+<h1>Boards</h1>
+
+<ul>
+@foreach (var boardModel in Model)
+{
+    <li><a href="@Url.Action("Get", "Boards", new { id = boardModel.Id })">@boardModel.Name</a></li>
+}
+</ul>

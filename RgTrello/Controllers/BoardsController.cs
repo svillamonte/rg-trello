@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System.Linq;
+using System.Web.Mvc;
+using RgTrello.Models.Boards;
 using RgTrello.Services.Exceptions;
 using RgTrello.Services.Interfaces;
 
@@ -7,10 +9,12 @@ namespace RgTrello.Controllers
     public class BoardsController : Controller
     {
         private readonly ITokenManager _tokenManager;
+        private readonly ITrelloService _trelloService;
 
-        public BoardsController(ITokenManager tokenManager)
+        public BoardsController(ITrelloService trelloService, ITokenManager tokenManager)
         {
             _tokenManager = tokenManager;
+            _trelloService = trelloService;
         }
         
         public ActionResult Index()
@@ -18,7 +22,12 @@ namespace RgTrello.Controllers
             try
             {
                 var accessToken = _tokenManager.GetUserToken();
-                return View();
+                _trelloService.SetToken(accessToken);
+
+                var boardModels = _trelloService.GetBoards()
+                    .Select(x => new BoardModel { Id = x.Id, Name = x.Name });
+
+                return View(boardModels);
             }
             catch (TokenNotFoundException)
             {
