@@ -82,5 +82,56 @@ namespace RgTrello.Services.Tests
             // Assert
             Assert.IsFalse(results.Any());
         }
+
+        [TestMethod]
+        public void GetBoardCards_WithNormalBehaviour_ReturnsListOfTrelloCards()
+        {
+            // Arrange
+            var cardOne = new TrelloCard { Id = "aaa111", Name = "Card one", Description = "Description one" };
+            var cardTwo = new TrelloCard { Id = "aaa222", Name = "Card two", Description = "Description two" };
+            var cardThree = new TrelloCard { Id = "aaa333", Name = "Card three", Description = "Description three" };
+
+            var mockRestResponse = new Mock<IRestResponse<List<TrelloCard>>>();
+            mockRestResponse
+                .Setup(x => x.Data)
+                .Returns(new List<TrelloCard> { cardOne, cardTwo, cardThree });
+
+            _mockTrelloApiClient
+                .Setup(x => x.Execute<List<TrelloCard>>(It.IsAny<RestRequest>()))
+                .Returns(mockRestResponse.Object);
+
+            // Act
+            var results = _trelloService.GetBoardCards(It.IsAny<string>());
+
+            // Assert
+            Assert.AreEqual(3, results.Count());
+
+            Assert.AreEqual("aaa111", results.ElementAt(0).Id);
+            Assert.AreEqual("Card one", results.ElementAt(0).Name);
+            Assert.AreEqual("Description one", results.ElementAt(0).Description);
+
+            Assert.AreEqual("aaa222", results.ElementAt(1).Id);
+            Assert.AreEqual("Card two", results.ElementAt(1).Name);
+            Assert.AreEqual("Description two", results.ElementAt(1).Description);
+
+            Assert.AreEqual("aaa333", results.ElementAt(2).Id);
+            Assert.AreEqual("Card three", results.ElementAt(2).Name);
+            Assert.AreEqual("Description three", results.ElementAt(2).Description);
+        }
+
+        [TestMethod]
+        public void GetBoardCards_WithIssuesInCommunicationWithApi_ReturnsEmptyList()
+        {
+            // Arrange
+            _mockTrelloApiClient
+                .Setup(x => x.Execute<List<TrelloCard>>(It.IsAny<RestRequest>()))
+                .Throws(new System.Exception());
+
+            // Act
+            var results = _trelloService.GetBoardCards(It.IsAny<string>());
+
+            // Assert
+            Assert.IsFalse(results.Any());
+        }
     }
 }

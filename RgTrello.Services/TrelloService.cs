@@ -37,11 +37,18 @@ namespace RgTrello.Services
 
         public IEnumerable<TrelloCard> GetBoardCards(string boardId)
         {
-            var request = new RestRequest("boards/{id}/cards", Method.GET);
-            request.AddUrlSegment("id", boardId);
+            try
+            {
+                var request = new RestRequest("boards/{id}/cards", Method.GET);
+                request.AddUrlSegment("id", boardId);
 
-            var response = _trelloClient.Execute<List<TrelloCard>>(request);
-            return response.Data;
+                var response = _trelloClient.Execute<List<TrelloCard>>(request);
+                return response.Data;
+            }
+            catch
+            {
+                return new TrelloCard[0];
+            }            
         }
     }
 }
