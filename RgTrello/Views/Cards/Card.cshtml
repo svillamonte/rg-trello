@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "Card details";
+}
+
+@model RgTrello.Models.Cards.CardModel
+
+@if (Model.CardWasFound)
+{
+    <h1>@Model.Name</h1>
+
+    if (string.IsNullOrEmpty(Model.Description))
+    {
+        <i>No description...</i>
+    }
+    else
+    {
+        <p>@Model.Description</p>
+    }
+}
+else
+{
+    <h1><i>Card not found</i></h1>
+}

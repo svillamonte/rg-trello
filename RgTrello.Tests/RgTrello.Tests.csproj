@@ -89,6 +89,7 @@
   <ItemGroup>
     <Compile Include="Controllers\BoardsControllerTests.cs" />
     <Compile Include="Controllers\CardsControllerTests.cs" />
+    <Compile Include="Models\Cards\CardModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />
   </ItemGroup>

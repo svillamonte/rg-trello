@@ -196,6 +196,7 @@
     </Compile>
     <Compile Include="Models\Boards\BoardModel.cs" />
     <Compile Include="Models\Boards\CardModel.cs" />
+    <Compile Include="Models\Cards\CardModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -237,6 +238,7 @@
     <Content Include="Views\Boards\Index.cshtml" />
     <Content Include="Views\Boards\Board.cshtml" />
     <Content Include="Views\Cards\Index.cshtml" />
+    <Content Include="Views\Cards\Card.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
