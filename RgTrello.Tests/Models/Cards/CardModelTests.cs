@@ -40,5 +40,19 @@ namespace RgTrello.Tests.Models.Cards
 
             Assert.IsFalse(cardModel.CardWasFound);
         }
+
+        [TestMethod]
+        public void CardModelConstructor_Parameterless_LeavesEverythingAsDefault()
+        {            
+            // Act
+            var cardModel = new CardModel();
+
+            // Assert
+            Assert.IsNull(cardModel.Id);
+            Assert.IsNull(cardModel.Name);
+            Assert.IsNull(cardModel.Description);
+
+            Assert.IsFalse(cardModel.CardWasFound);
+        }
     }
 }

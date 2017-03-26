@@ -37,5 +37,24 @@ namespace RgTrello.Controllers
                 return RedirectToAction("Index", "Home");
             }
         }
+
+        [HttpPost]
+        public ActionResult Card(CardModel cardModel)
+        {
+            try
+            {
+                var accessToken = _tokenManager.GetUserToken();
+                _trelloService.SetToken(accessToken);
+
+                _trelloService.PostCommentToCard(cardModel.Id, cardModel.NewComment);
+
+                return RedirectToAction("Index", "Boards");
+            }
+            catch
+            {
+                cardModel.Error = true;
+                return View(cardModel);
+            }
+        }
     }
 }

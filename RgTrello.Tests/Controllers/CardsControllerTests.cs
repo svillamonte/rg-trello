@@ -85,18 +85,66 @@ namespace RgTrello.Tests.Controllers
         public void Card_WithApiThrowingException_RedirectsToHomeController()
         {
             // Arrange
-            var boardId = "aniceboardid";
+            var cardId = "anicecardid";
 
             _mockTrelloService
-                .Setup(x => x.GetCard(boardId))
+                .Setup(x => x.GetCard(cardId))
                 .Throws(new TokenNotFoundException());
 
             // Act
-            var result = _cardsController.Card(boardId) as RedirectToRouteResult;
+            var result = _cardsController.Card(cardId) as RedirectToRouteResult;
 
             // Assert
             Assert.AreEqual("Index", result.RouteValues["action"]);
             Assert.AreEqual("Home", result.RouteValues["controller"]);
+        }
+
+        [TestMethod]
+        public void Card_WithModelReceivedAndEverythingChecksOut_RedirectsToBoardsController()
+        {
+            // Arrange
+            var cardModel = new CardModel { Id = "aaa111", Name = "Card name", Description = "Card description", NewComment = "Card comment" };
+
+            _mockTrelloService
+                .Setup(x => x.PostCommentToCard(cardModel.Id, cardModel.NewComment));
+
+            // Act
+            var result = _cardsController.Card(cardModel) as RedirectToRouteResult;
+
+            // Assert
+            Assert.AreEqual("Index", result.RouteValues["action"]);
+            Assert.AreEqual("Boards", result.RouteValues["controller"]);
+        }
+
+        [TestMethod]
+        public void Card_WithModelReceivedAndServiceThrowingException_ReturnsToViewWithError()
+        {
+            // Arrange
+            var cardModel = new CardModel {
+                Id = "aaa111",
+                Name = "Card name",
+                Description = "Card description",
+                NewComment = "Card comment",
+                CardWasFound = true
+            };
+
+            _mockTrelloService
+                .Setup(x => x.PostCommentToCard(cardModel.Id, cardModel.NewComment))
+                .Throws(new CommentNotPostedException());
+
+            // Act
+            var result = _cardsController.Card(cardModel) as ViewResult;
+
+            // Assert
+            Assert.IsInstanceOfType(result.Model, typeof(CardModel));
+            var resultCardModel = (CardModel)result.Model;
+
+            Assert.AreEqual(cardModel.Id, resultCardModel.Id);
+            Assert.AreEqual(cardModel.Name, resultCardModel.Name);
+            Assert.AreEqual(cardModel.Description, resultCardModel.Description);
+            Assert.AreEqual(cardModel.NewComment, resultCardModel.NewComment);
+            Assert.IsTrue(resultCardModel.CardWasFound);
+            Assert.IsTrue(resultCardModel.Error);
         }
     }
 }
