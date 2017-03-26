@@ -26,9 +26,11 @@ namespace RgTrello.Controllers
             if (result.IsSuccessful)
             {
                 _tokenManager.AddUserToken(result.ExtraData["accesstoken"]);
-            }            
 
-            return RedirectToAction("Index", "Boards");
+                return RedirectToAction("Index", "Boards");
+            }
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }

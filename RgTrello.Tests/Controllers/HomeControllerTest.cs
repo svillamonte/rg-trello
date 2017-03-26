@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RgTrello.Controllers;
+using RgTrello.Services;
 
 namespace RgTrello.Tests.Controllers
 {
@@ -11,7 +12,7 @@ namespace RgTrello.Tests.Controllers
         public void Index()
         {
             // Arrange
-            HomeController controller = new HomeController();
+            HomeController controller = new HomeController(new TokenManager());
 
             // Act
             ViewResult result = controller.Index() as ViewResult;
