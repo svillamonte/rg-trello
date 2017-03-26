@@ -6,6 +6,8 @@ using RestSharp;
 using RgTrello.Services.Interfaces;
 using RgTrello.Services.Trello;
 using RgTrello.Services.Trello.DTOs;
+using System.Net;
+using RgTrello.Services.Exceptions;
 
 namespace RgTrello.Services.Tests
 {
@@ -218,6 +220,57 @@ namespace RgTrello.Services.Tests
             Assert.IsNull(result.Id);
             Assert.IsNull(result.Name);
             Assert.IsNull(result.Description);
+        }
+
+        [TestMethod]
+        public void PostCommentToCard_WithOkResponse_FollowsExpectedExecutionFlow()
+        {
+            // Arrange
+            var mockRestResponse = new Mock<IRestResponse>();
+            mockRestResponse
+                .Setup(x => x.StatusCode)
+                .Returns(HttpStatusCode.OK);
+
+            _mockTrelloApiClient
+                .Setup(x => x.Execute(It.IsAny<RestRequest>()))
+                .Returns(mockRestResponse.Object);
+
+            // Act
+            _trelloService.PostCommentToCard(It.IsAny<string>(), It.IsAny<string>());
+
+            // Assert
+            _mockTrelloApiClient.Verify(x => x.Execute(It.IsAny<RestRequest>()), Times.Once);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(CommentNotPostedException))]
+        public void PostCommentToCard_WithUnauthorizedResponse_ThrowsException()
+        {
+            // Arrange
+            var mockRestResponse = new Mock<IRestResponse>();
+            mockRestResponse
+                .Setup(x => x.StatusCode)
+                .Returns(HttpStatusCode.Unauthorized);
+
+            _mockTrelloApiClient
+                .Setup(x => x.Execute(It.IsAny<RestRequest>()))
+                .Returns(mockRestResponse.Object);
+
+            // Act
+            _trelloService.PostCommentToCard(It.IsAny<string>(), It.IsAny<string>());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(CommentNotPostedException))]
+        public void PostCommentToCard_WithIssuesInCommunicationWithApi_ThrowsException()
+        {
+            // Arrange
+            _mockTrelloApiClient
+                .Setup(x => x.Execute(It.IsAny<RestRequest>()))
+                .Throws(new System.Exception());
+
+            // Act
+            _trelloService.PostCommentToCard(It.IsAny<string>(), It.IsAny<string>());
         }
     }
 }

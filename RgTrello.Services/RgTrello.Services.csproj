@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\CommentNotPostedException.cs" />
     <Compile Include="Trello\DTOs\ITrelloCard.cs" />
     <Compile Include="Trello\DTOs\NullTrelloCard.cs" />
     <Compile Include="Trello\DTOs\TrelloBoard.cs" />

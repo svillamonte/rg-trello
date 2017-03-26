@@ -3,6 +3,8 @@ using RestSharp;
 using RgTrello.Services.Interfaces;
 using RgTrello.Services.Trello;
 using RgTrello.Services.Trello.DTOs;
+using System.Net;
+using RgTrello.Services.Exceptions;
 
 namespace RgTrello.Services
 {
@@ -74,6 +76,26 @@ namespace RgTrello.Services
             catch
             {
                 return new NullTrelloCard();
+            }
+        }
+
+        public void PostCommentToCard(string cardId, string commentText)
+        {
+            try
+            {
+                var request = new RestRequest("cards/{id}/actions/comments", Method.POST);
+                request.AddUrlSegment("id", cardId);
+                request.AddParameter("text", commentText);
+
+                var response = _trelloClient.Execute(request);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    throw new CommentNotPostedException();
+                }
+            }
+            catch
+            {
+                throw new CommentNotPostedException();
             }
         }
     }
