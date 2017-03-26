@@ -186,6 +186,8 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Auth\IOAuthWebSecurity.cs" />
+    <Compile Include="Auth\OAuthWebSecurityWrapper.cs" />
     <Compile Include="Auth\TrelloClient.cs" />
     <Compile Include="Controllers\AuthenticationController.cs" />
     <Compile Include="Controllers\BoardsController.cs" />

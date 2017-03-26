@@ -11,6 +11,7 @@ namespace RgTrello.App_Start
     using Ninject;
     using Ninject.Web.Common;
     using RgTrello.Services;
+    using RgTrello.Auth;
 
     public static class NinjectWebCommon 
     {
@@ -63,6 +64,8 @@ namespace RgTrello.App_Start
         private static void RegisterServices(IKernel kernel)
         {
             kernel.Load(new ServicesNinjectModule());
+
+            kernel.Bind<IOAuthWebSecurity>().To<OAuthWebSecurityWrapper>();
         }        
     }
 }
