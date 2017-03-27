@@ -25,8 +25,8 @@ Before performing any action, the app needs to be authenticated against Trello. 
 A couple of concessions have been made to deliver this completely functional solution:
 
 * The use of a persistence layer could not be justified. Right now, the user needs to perform an authentication against Trello every time the application is started. The obtained token is then stored in a singleton TokenManager class, which proved to be enough for the identified scope of the exercise. Future work could include persisting the user and related token in the database, avoiding using a singleton, which is considered an antipattern for large scale systems. This would allow:
-..* Having a record of all the users of the application, by making use of Trello as a third-party login provider. Each profile can be registered via cookies dropped in the client and on each new run, the user id from the cookie could be matched against the user's profile in the database to retrieve the proper token.
-..* Making proper use of token expiration and renewal by updating the recorded sets.
+  * Having a record of all the users of the application, by making use of Trello as a third-party login provider. Each profile can be registered via cookies dropped in the client and on each new run, the user id from the cookie could be matched against the user's profile in the database to retrieve the proper token.
+  * Making proper use of token expiration and renewal by updating the recorded sets.
 
 * Secrets and keys are stored in the source code. This is a security issue that would need to be solved by storing them in encrypted configuration files. For large scale solutions, secrets are stored outside source control, under the deployment pipeline tool infrastructure.
 
