@@ -58,6 +58,7 @@
     <Compile Include="TokenManagerTests.cs" />
     <Compile Include="TrelloServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Trello\TrelloApiClientTests.cs" />
     <Compile Include="Trello\TrelloAuthenticatorTests.cs" />
   </ItemGroup>
   <ItemGroup>
