@@ -15,17 +15,14 @@ namespace RgTrello.Tests.Controllers
     public class BoardsControllerTests
     {
         private readonly Mock<ITrelloService> _mockTrelloService;
-        private readonly Mock<ITokenManager> _mockTokenManager;
 
         private readonly BoardsController _boardsController;
 
         public BoardsControllerTests()
         {
             _mockTrelloService = new Mock<ITrelloService>();
-            _mockTokenManager = new Mock<ITokenManager>();
-            _mockTokenManager.Setup(x => x.GetUserToken()).Returns("anicetokentotest");
 
-            _boardsController = new BoardsController(_mockTrelloService.Object, _mockTokenManager.Object);
+            _boardsController = new BoardsController(_mockTrelloService.Object);
         }
 
         [TestMethod]
@@ -35,8 +32,6 @@ namespace RgTrello.Tests.Controllers
             var result = _boardsController.Index() as ViewResult;
 
             // Assert
-            _mockTokenManager.Verify(x => x.GetUserToken(), Times.Once);
-            _mockTrelloService.Verify(x => x.SetToken(_mockTokenManager.Object.GetUserToken()), Times.Once);
             _mockTrelloService.Verify(x => x.GetBoards(), Times.Once);
         }
 
@@ -92,8 +87,6 @@ namespace RgTrello.Tests.Controllers
             var result = _boardsController.Board(boardId) as ViewResult;
 
             // Assert
-            _mockTokenManager.Verify(x => x.GetUserToken(), Times.Once);
-            _mockTrelloService.Verify(x => x.SetToken(_mockTokenManager.Object.GetUserToken()), Times.Once);
             _mockTrelloService.Verify(x => x.GetBoardCards(boardId), Times.Once);
         }
 

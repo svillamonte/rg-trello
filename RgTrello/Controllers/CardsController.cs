@@ -7,12 +7,10 @@ namespace RgTrello.Controllers
 {
     public class CardsController : Controller
     {
-        private readonly ITokenManager _tokenManager;
         private readonly ITrelloService _trelloService;
 
-        public CardsController(ITrelloService trelloService, ITokenManager tokenManager)
+        public CardsController(ITrelloService trelloService)
         {
-            _tokenManager = tokenManager;
             _trelloService = trelloService;
         }
 
@@ -25,9 +23,6 @@ namespace RgTrello.Controllers
         {
             try
             {
-                var accessToken = _tokenManager.GetUserToken();
-                _trelloService.SetToken(accessToken);
-
                 var trelloCard = _trelloService.GetCard(id);
 
                 return View(new CardModel((dynamic)trelloCard));
@@ -43,9 +38,6 @@ namespace RgTrello.Controllers
         {
             try
             {
-                var accessToken = _tokenManager.GetUserToken();
-                _trelloService.SetToken(accessToken);
-
                 _trelloService.PostCommentToCard(cardModel.Id, cardModel.NewComment);
 
                 return RedirectToAction("Index", "Boards");

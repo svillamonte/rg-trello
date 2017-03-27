@@ -4,6 +4,8 @@ namespace RgTrello.Services.Trello
 {
     public interface ITrelloApiClient : IRestClient
     {
-        void SetToken(string userToken);
+        IRestResponse<T> Execute<T>(IRestRequest request, string userToken) where T : new();
+
+        IRestResponse Execute(IRestRequest request, string userToken);
     }
 }

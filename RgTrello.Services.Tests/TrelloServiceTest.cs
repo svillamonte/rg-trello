@@ -1,40 +1,30 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using RestSharp;
+using RgTrello.Services.Exceptions;
 using RgTrello.Services.Interfaces;
 using RgTrello.Services.Trello;
 using RgTrello.Services.Trello.DTOs;
-using System.Net;
-using RgTrello.Services.Exceptions;
 
 namespace RgTrello.Services.Tests
 {
     [TestClass]
     public class TrelloServiceTest
     {
+        private readonly Mock<ITokenManager> _mockTokenManager;
         private readonly Mock<ITrelloApiClient> _mockTrelloApiClient;
+
         private readonly ITrelloService _trelloService;
 
         public TrelloServiceTest()
         {
+            _mockTokenManager = new Mock<ITokenManager>();
             _mockTrelloApiClient = new Mock<ITrelloApiClient>();
 
-            _trelloService = new TrelloService(_mockTrelloApiClient.Object);
-        }
-
-        [TestMethod]
-        public void SetToken_VerifiesClientSetTokenMethodIsCalled()
-        {
-            // Arrange
-            var token = "anicetokentotest";
-
-            // Act
-            _trelloService.SetToken(token);
-
-            // Assert
-            _mockTrelloApiClient.Verify(x => x.SetToken(token), Times.Once);
+            _trelloService = new TrelloService(_mockTokenManager.Object, _mockTrelloApiClient.Object);
         }
 
         [TestMethod]
@@ -51,7 +41,7 @@ namespace RgTrello.Services.Tests
                 .Returns(new List<TrelloBoard> { boardOne, boardTwo, boardThree });
 
             _mockTrelloApiClient
-                .Setup(x => x.Execute<List<TrelloBoard>>(It.IsAny<RestRequest>()))
+                .Setup(x => x.Execute<List<TrelloBoard>>(It.IsAny<RestRequest>(), _mockTokenManager.Object.GetUserToken()))
                 .Returns(mockRestResponse.Object);
 
             // Act
@@ -75,7 +65,7 @@ namespace RgTrello.Services.Tests
         {
             // Arrange
             _mockTrelloApiClient
-                .Setup(x => x.Execute<List<TrelloBoard>>(It.IsAny<RestRequest>()))
+                .Setup(x => x.Execute<List<TrelloBoard>>(It.IsAny<RestRequest>(), _mockTokenManager.Object.GetUserToken()))
                 .Throws(new System.Exception());
 
             // Act
@@ -99,7 +89,7 @@ namespace RgTrello.Services.Tests
                 .Returns(new List<TrelloCard> { cardOne, cardTwo, cardThree });
 
             _mockTrelloApiClient
-                .Setup(x => x.Execute<List<TrelloCard>>(It.IsAny<RestRequest>()))
+                .Setup(x => x.Execute<List<TrelloCard>>(It.IsAny<RestRequest>(), _mockTokenManager.Object.GetUserToken()))
                 .Returns(mockRestResponse.Object);
 
             // Act
@@ -131,7 +121,7 @@ namespace RgTrello.Services.Tests
                 .Returns((List<TrelloCard>)null);
 
             _mockTrelloApiClient
-                .Setup(x => x.Execute<List<TrelloCard>>(It.IsAny<RestRequest>()))
+                .Setup(x => x.Execute<List<TrelloCard>>(It.IsAny<RestRequest>(), _mockTokenManager.Object.GetUserToken()))
                 .Returns(mockRestResponse.Object);
 
             // Act
@@ -146,7 +136,7 @@ namespace RgTrello.Services.Tests
         {
             // Arrange
             _mockTrelloApiClient
-                .Setup(x => x.Execute<List<TrelloCard>>(It.IsAny<RestRequest>()))
+                .Setup(x => x.Execute<List<TrelloCard>>(It.IsAny<RestRequest>(), _mockTokenManager.Object.GetUserToken()))
                 .Throws(new System.Exception());
 
             // Act
@@ -168,7 +158,7 @@ namespace RgTrello.Services.Tests
                 .Returns(cardOne);
 
             _mockTrelloApiClient
-                .Setup(x => x.Execute<TrelloCard>(It.IsAny<RestRequest>()))
+                .Setup(x => x.Execute<TrelloCard>(It.IsAny<RestRequest>(), _mockTokenManager.Object.GetUserToken()))
                 .Returns(mockRestResponse.Object);
 
             // Act
@@ -191,7 +181,7 @@ namespace RgTrello.Services.Tests
                 .Returns((TrelloCard)null);
 
             _mockTrelloApiClient
-                .Setup(x => x.Execute<TrelloCard>(It.IsAny<RestRequest>()))
+                .Setup(x => x.Execute<TrelloCard>(It.IsAny<RestRequest>(), _mockTokenManager.Object.GetUserToken()))
                 .Returns(mockRestResponse.Object);
 
             // Act
@@ -209,7 +199,7 @@ namespace RgTrello.Services.Tests
         {
             // Arrange
             _mockTrelloApiClient
-                .Setup(x => x.Execute<TrelloCard>(It.IsAny<RestRequest>()))
+                .Setup(x => x.Execute<TrelloCard>(It.IsAny<RestRequest>(), _mockTokenManager.Object.GetUserToken()))
                 .Throws(new System.Exception());
 
             // Act
@@ -232,14 +222,14 @@ namespace RgTrello.Services.Tests
                 .Returns(HttpStatusCode.OK);
 
             _mockTrelloApiClient
-                .Setup(x => x.Execute(It.IsAny<RestRequest>()))
+                .Setup(x => x.Execute(It.IsAny<RestRequest>(), _mockTokenManager.Object.GetUserToken()))
                 .Returns(mockRestResponse.Object);
 
             // Act
             _trelloService.PostCommentToCard(It.IsAny<string>(), It.IsAny<string>());
 
             // Assert
-            _mockTrelloApiClient.Verify(x => x.Execute(It.IsAny<RestRequest>()), Times.Once);
+            _mockTrelloApiClient.Verify(x => x.Execute(It.IsAny<RestRequest>(), _mockTokenManager.Object.GetUserToken()), Times.Once);
         }
 
         [TestMethod]
@@ -253,7 +243,7 @@ namespace RgTrello.Services.Tests
                 .Returns(HttpStatusCode.Unauthorized);
 
             _mockTrelloApiClient
-                .Setup(x => x.Execute(It.IsAny<RestRequest>()))
+                .Setup(x => x.Execute(It.IsAny<RestRequest>(), _mockTokenManager.Object.GetUserToken()))
                 .Returns(mockRestResponse.Object);
 
             // Act
@@ -266,7 +256,7 @@ namespace RgTrello.Services.Tests
         {
             // Arrange
             _mockTrelloApiClient
-                .Setup(x => x.Execute(It.IsAny<RestRequest>()))
+                .Setup(x => x.Execute(It.IsAny<RestRequest>(), _mockTokenManager.Object.GetUserToken()))
                 .Throws(new System.Exception());
 
             // Act

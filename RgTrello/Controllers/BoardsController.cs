@@ -8,12 +8,10 @@ namespace RgTrello.Controllers
 {
     public class BoardsController : Controller
     {
-        private readonly ITokenManager _tokenManager;
         private readonly ITrelloService _trelloService;
 
-        public BoardsController(ITrelloService trelloService, ITokenManager tokenManager)
+        public BoardsController(ITrelloService trelloService)
         {
-            _tokenManager = tokenManager;
             _trelloService = trelloService;
         }
 
@@ -21,9 +19,6 @@ namespace RgTrello.Controllers
         {
             try
             {
-                var accessToken = _tokenManager.GetUserToken();
-                _trelloService.SetToken(accessToken);
-
                 var boardModels = _trelloService.GetBoards()
                     .Select(x => new BoardModel { Id = x.Id, Name = x.Name });
 
@@ -39,9 +34,6 @@ namespace RgTrello.Controllers
         {
             try
             {
-                var accessToken = _tokenManager.GetUserToken();
-                _trelloService.SetToken(accessToken);
-
                 var cardModels = _trelloService.GetBoardCards(id)
                     .Select(x => new CardModel { Id = x.Id, Name = x.Name });
 

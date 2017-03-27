@@ -1,4 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using RestSharp;
 using RgTrello.Services.Trello;
 
 namespace RgTrello.Services.Tests.Trello
@@ -7,19 +9,19 @@ namespace RgTrello.Services.Tests.Trello
     public class TrelloApiClientTests
     {
         [TestMethod]
-        public void SetToken_AssignsInstanceOfIAuthenticator()
+        public void Execute_WithoutGenerics_AssignsInstanceOfIAuthenticator()
         {
             // Arrange
             var token = "anicetoken";
 
-            var clientWithoutAuthenticator = new TrelloApiClient();
+            var mockRestRequest = new Mock<IRestRequest>();
+
             var clientWithAuthenticator = new TrelloApiClient();
 
             // Act
-            clientWithAuthenticator.SetToken(token);
+            var result = clientWithAuthenticator.Execute(mockRestRequest.Object, token);
 
             // Assert
-            Assert.IsNull(clientWithoutAuthenticator.Authenticator);
             Assert.IsNotNull(clientWithAuthenticator.Authenticator);
         }
     }

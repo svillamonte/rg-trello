@@ -10,9 +10,16 @@ namespace RgTrello.Services.Trello
         {            
         }
 
-        public void SetToken(string userToken)
+        public IRestResponse<T> Execute<T>(IRestRequest request, string userToken) where T : new()
         {
             Authenticator = new TrelloAuthenticator(ApplicationKey, userToken);
+            return Execute<T>(request);
+        }
+
+        public IRestResponse Execute(IRestRequest request, string userToken)
+        {
+            Authenticator = new TrelloAuthenticator(ApplicationKey, userToken);
+            return Execute(request);
         }
     }
 }
