@@ -25,7 +25,7 @@ namespace RgTrello.Services.Tests
         }
 
         [TestMethod]
-        public void SetToken()
+        public void SetToken_VerifiesClientSetTokenMethodIsCalled()
         {
             // Arrange
             var token = "anicetokentotest";

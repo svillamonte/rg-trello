@@ -1,8 +1,6 @@
 ﻿using System.Web.Mvc;
 using RgTrello.Auth;
 using RgTrello.Services.Interfaces;
-using System.Web.Routing;
-using System.Web;
 
 namespace RgTrello.Controllers
 {
